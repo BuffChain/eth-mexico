@@ -2,20 +2,20 @@ pragma solidity ^0.8.0;
 
 contract Portfolio {
 
-    event SetPurpose(address sender, string purpose);
+    event PortfolioBalanced();
 
-    string public purpose = "Building Unstoppable Apps!!!";
+    string public name;
+    address[] public tokens;
 
-    constructor() payable {
-        // what should we do on deploy?
+    constructor(string memory _name, address[] memory _tokens) payable {
+        name = name;
+        tokens = _tokens;
     }
 
-    function setPurpose(string memory newPurpose) public {
-        purpose = newPurpose;
-        emit SetPurpose(msg.sender, purpose);
+    function balance() public {
+        emit PortfolioBalanced();
     }
 
-    // to support receiving ETH by default
     receive() external payable {}
     fallback() external payable {}
 

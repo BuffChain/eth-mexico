@@ -320,7 +320,7 @@ function App(props) {
             */}
 
           <Contract
-            name="Portfolio"
+            name="PortfolioManager"
             price={price}
             signer={userSigner}
             provider={localProvider}
