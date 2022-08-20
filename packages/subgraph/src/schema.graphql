@@ -1,15 +1,12 @@
-type Purpose @entity {
+type Token @entity {
   id: ID!
-  sender: Sender!
-  purpose: String!
-  createdAt: BigInt!
-  transactionHash: String!
+  assetAddr: Bytes!
 }
 
-type Sender @entity {
+type Portfolio @entity {
   id: ID!
   address: Bytes!
-  purposes: [Purpose!] @derivedFrom(field: "sender")
+  name: String!
+  tokens: [Bytes!]!
   createdAt: BigInt!
-  purposeCount: BigInt!
 }
