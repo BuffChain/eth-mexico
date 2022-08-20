@@ -1,11 +1,11 @@
 import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
-  YourContract,
+  PortfolioManager,
   SetPurpose,
 } from "../generated/YourContract/YourContract";
 import { Purpose, Sender } from "../generated/schema";
 
-export function handleSetPurpose(event: SetPurpose): void {
+export function handlePortfolioCreated(event: SetPurpose): void {
   let senderString = event.params.sender.toHexString();
 
   let sender = Sender.load(senderString);
