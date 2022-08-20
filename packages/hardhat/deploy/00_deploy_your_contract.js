@@ -78,5 +78,66 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // } catch (error) {
   //   console.error(error);
   // }
+
+  const { contractOwner } = await getNamedAccounts();
+
+  console.log(`Deployer address [${deployer}]`);
+  console.log(`Contract owner address [${contractOwner}]`);
+
+  const token = await deployments.deploy("DAOToken", {
+    from: deployer,
+    owner: deployer,
+    args: ["DAOToken", "DAO"],
+    log: true,
+  });
+
+  console.log(`Token address [${token.address}]`);
+
+  const timelockController = await deployments.deploy("TimelockController", {
+    from: deployer,
+    owner: deployer,
+    // access control: https://docs.openzeppelin.com/contracts/4.x/governance#timelock
+    args: [0, [], []],
+    log: true,
+  });
+
+  console.log(`TimelockController address [${timelockController.address}]`);
+
+  const tokenGovernor = await deployments.deploy("DAOGovernor", {
+    from: deployer,
+    owner: deployer,
+    args: [
+      token.address,
+      timelockController.address,
+      6575, // 1 day
+      46027, // 1 week
+      0,
+    ],
+    log: true,
+  });
+
+  console.log(`DAOGovernor address [${await tokenGovernor.address}]`);
+
+  // https://docs.openzeppelin.com/defender/guide-timelock-roles
+  const proposerRole =
+    "0xb09aa5aeb3702cfd50b6b62bc4532604938f21248a27a1d5ca736082b6819cc1";
+  const executorRole =
+    "0xd8aa0f3194971a2a116679f7c2090f6939c8d4e01a2a8d7e41d55e5351469e63";
+  const adminRole =
+    "0x5f58e3a2316349923ce3780f8d587db2d72378aed66a8261c916544fa6846ca5";
+
+  // eslint-disable-next-line import/no-unresolved
+  const AccessControlABI =
+    require("../artifacts/@openzeppelin/contracts/access/AccessControl.sol/AccessControl.json").abi;
+  const accessControl = await hre.ethers.getContractAt(
+    AccessControlABI,
+    timelockController.address,
+    await hre.ethers.getSigner(deployer)
+  );
+
+  // access control: https://docs.openzeppelin.com/contracts/4.x/governance#timelock
+  await accessControl.grantRole(proposerRole, tokenGovernor.address);
+  await accessControl.grantRole(executorRole, tokenGovernor.address);
+  await accessControl.revokeRole(adminRole, deployer);
 };
 module.exports.tags = ["YourContract"];
