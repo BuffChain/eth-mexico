@@ -26,18 +26,11 @@ function Subgraph(props) {
 
   const EXAMPLE_GRAPHQL = `
   {
-    purposes(first: 25, orderBy: createdAt, orderDirection: desc) {
+    portfolios(first: 25, orderBy: createdAt, orderDirection: desc) {
       id
-      purpose
+      name
+      tokens
       createdAt
-      sender {
-        id
-      }
-    }
-    senders {
-      id
-      address
-      purposeCount
     }
   }
   `;
@@ -46,17 +39,19 @@ function Subgraph(props) {
 
   const purposeColumns = [
     {
-      title: "Purpose",
-      dataIndex: "purpose",
-      key: "purpose",
-    },
-    {
-      title: "Sender",
+      title: "Portfolio",
+      dataIndex: "id",
       key: "id",
-      render: record => <Address value={record.sender.id} ensProvider={props.mainnetProvider} fontSize={16} />,
+      render: record => <Address value={record} ensProvider={props.mainnetProvider} fontSize={16} />,
     },
     {
-      title: "createdAt",
+      title: "Tokens",
+      dataIndex: "tokens",
+      key: "tokens",
+      // render: record => <Address value={record} ensProvider={props.mainnetProvider} fontSize={16} />,
+    },
+    {
+      title: "Created At",
       key: "createdAt",
       dataIndex: "createdAt",
       render: d => new Date(d * 1000).toISOString(),
@@ -182,9 +177,11 @@ function Subgraph(props) {
             Set Purpose
           </Button>
         </div>
+        {/*<Typography>{JSON.stringify(data.id)}</Typography>*/}
+        {/*<Typography>{JSON.stringify(data.portfolios)}</Typography>*/}
 
         {data ? (
-          <Table dataSource={data.purposes} columns={purposeColumns} rowKey="id" />
+          <Table dataSource={data.portfolios} columns={purposeColumns} rowKey="id" />
         ) : (
           <Typography>{loading ? "Loading..." : deployWarning}</Typography>
         )}
