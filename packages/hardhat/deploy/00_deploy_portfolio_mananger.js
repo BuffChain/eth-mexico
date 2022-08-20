@@ -1,4 +1,4 @@
-// deploy/00_deploy_your_contract.js
+// deploy/00_deploy_portfolio_mananger.js
 
 const { ethers } = require("hardhat");
 
@@ -12,10 +12,9 @@ const localChainId = "31337";
 //     }, ms)
 //   );
 
-module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
+module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
-  const chainId = await getChainId();
 
   console.log(`Deployer address [${deployer}]`);
 
@@ -85,5 +84,22 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     waitConfirmations: 5,
   });
 
+  const PortfolioManager = await ethers.getContract(
+    "PortfolioManager",
+    deployer
+  );
+
+  const portfolioAddressTxResponse = await PortfolioManager.createPortfolio(
+    "test portfolio 1",
+    ["0xdAC17F958D2ee523a2206206994597C13D831ec7"]
+  );
+
+  const portfolioAddressTxReceipt = await portfolioAddressTxResponse.wait();
+  const portfolioCreatedEvent = portfolioAddressTxReceipt.events.find(event => event.event === "PortfolioCreated");
+  const portfolioAddress = portfolioCreatedEvent.args[1];
+
+  console.log(`Portfolio address [${portfolioAddress}]`);
+
+  await PortfolioManager.transferOwnership(daoGovernorAddress);
 };
 module.exports.tags = ["eth-mexico-dapp-v0.0.1"];

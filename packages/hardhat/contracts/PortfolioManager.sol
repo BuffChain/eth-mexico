@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract PortfolioManager is Ownable {
 
     constructor (address newOwner) {
-        transferOwnership(newOwner);
+//        transferOwnership(newOwner);
     }
 
     event PortfolioCreated(string portfolioName, address portfolioAddress);
