@@ -12,6 +12,7 @@ export function handlePortfolioCreated(event: PortfolioCreated): void {
 
   let portfolio = new Portfolio(portfolioAddress);
   portfolio.name = portfolioName;
+  portfolio.address = Bytes.fromHexString(portfolioAddress);
   portfolio.tokens = portfolioTokens;
   portfolio.createdAt = event.block.timestamp;
 
