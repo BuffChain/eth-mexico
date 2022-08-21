@@ -69,13 +69,13 @@ function Subgraph(props) {
   );
 
   return (
-    <>
+    <div style={{padding: '0px 32px'}}>
         {data ? (
           <Table dataSource={data.portfolios} columns={portfolioColumns} rowKey="id" />
         ) : (
           <Typography>{loading ? "Loading..." : deployWarning}</Typography>
         )}
-    </>
+    </div>
   );
 }
 
