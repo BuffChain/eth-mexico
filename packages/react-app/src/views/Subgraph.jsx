@@ -26,7 +26,7 @@ function Subgraph(props) {
     }
   }
   `;
-  const { portfolioLoading, portfolioData } = useQuery(gql(portfolioQuery), { pollInterval: 2500 });
+  const { loading: portfolioLoading, data: portfolioData } = useQuery(gql(portfolioQuery), { pollInterval: 2500 });
 
   const balanceQuery = `
   {
@@ -38,7 +38,7 @@ function Subgraph(props) {
     }
   }
   `;
-  const { balanceLoading, balanceData } = useQuery(gql(balanceQuery), { pollInterval: 2500 });
+  const { loading: balanceLoading, data: balanceData } = useQuery(gql(balanceQuery), { pollInterval: 2500 });
 
   const portfolioColumns = [
     {
@@ -105,7 +105,6 @@ function Subgraph(props) {
           <Typography>{portfolioLoading ? "Loading..." : deployWarning}</Typography>
         )}
       </div>
-
       <div style={{padding: '0px 32px'}}>
         {balanceData ? (
           <Table dataSource={balanceData.balance} columns={balanceColumns} rowKey="id" />
