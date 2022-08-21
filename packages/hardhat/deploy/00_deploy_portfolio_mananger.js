@@ -76,10 +76,24 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   await accessControl.grantRole(executorRole, daoGovernorAddress);
   await accessControl.revokeRole(adminRole, deployer);
 
+  await deploy("PriceConsumer", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    log: true,
+    waitConfirmations: 5,
+  });
+
+  const PriceConsumer = await ethers.getContract(
+    "PriceConsumer",
+    deployer
+  );
+
+  console.log(`PriceConsumer Address [${PriceConsumer.address}]`);
+
   await deploy("PortfolioManager", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [daoGovernorAddress],
+    args: [daoGovernorAddress, await PriceConsumer.address],
     log: true,
     waitConfirmations: 5,
   });
@@ -121,26 +135,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   await deploy("Portfolio", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: ["debug portfolio", [USDT, USDC, DAI]],
+    args: ["debug portfolio", [USDT, USDC, DAI, WETH], await PriceConsumer.address],
     log: true,
     waitConfirmations: 5,
   });
-
-
-  // await deploy("PriceConsumer", {
-  //   // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-  //   from: deployer,
-  //   log: true,
-  //   waitConfirmations: 5,
-  // });
-  //
-  // const PriceConsumer = await ethers.getContract(
-  //   "PriceConsumer",
-  //   deployer
-  // );
-  //
-  // const price = await PriceConsumer.getLatestPrice();
-  // conseol.log(price)
-
+  
 };
 module.exports.tags = ["eth-mexico-dapp-v0.0.1"];
