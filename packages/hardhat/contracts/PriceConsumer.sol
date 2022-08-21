@@ -4,21 +4,11 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract PriceConsumer {
 
-    AggregatorV3Interface internal priceFeed;
-
-    /**
-     * Network: Goerli
-     * Aggregator: ETH/USD
-     * Address: 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e
-     */
-    constructor() {
-        priceFeed = AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
-    }
-
     /**
      * Returns the latest price
      */
-    function getLatestPrice() public view returns (int) {
+    function getLatestPrice(address aggregator) public view returns (int) {
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(aggregator);
         (
         /*uint80 roundID*/,
         int price,
@@ -28,4 +18,5 @@ contract PriceConsumer {
         ) = priceFeed.latestRoundData();
         return price;
     }
+
 }
