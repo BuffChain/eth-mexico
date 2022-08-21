@@ -48,6 +48,12 @@ function Subgraph(props) {
       title: "Tokens",
       dataIndex: "tokens",
       key: "tokens",
+      render: record => {
+        let addressComponents = record.map(assetAddr => {
+          return (<Address value={assetAddr} ensProvider={props.mainnetProvider} fontSize={16} />)
+        });
+        return (<div>{addressComponents}</div>)
+      },
       // render: record => <Address value={record} ensProvider={props.mainnetProvider} fontSize={16} />,
     },
     {
