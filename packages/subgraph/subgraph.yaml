@@ -7,7 +7,8 @@ dataSources:
     network: localhost
     source:
       abi: PortfolioManager
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+      startBlock: 15381700
+      address: "0x975Ab64F4901Af5f0C96636deA0b9de3419D0c2F"
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -26,7 +27,8 @@ dataSources:
     network: localhost
     source:
       abi: Portfolio
-      address: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e"
+      startBlock: 15381700
+      address: "0x94fFA1C7330845646CE9128450F8e6c3B5e44F86"
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -37,6 +39,6 @@ dataSources:
         - name: Portfolio
           file: ./abis/localhost_Portfolio.json
       eventHandlers:
-        - event: PortfolioBalanced((address,uint256,int256)[])
+        - event: PortfolioBalanced(address,(address,uint256,int256)[])
           handler: handlePortfolioBalanced
       file: ./src/mapping.ts

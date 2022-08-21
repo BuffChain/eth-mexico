@@ -1,8 +1,14 @@
-type Balance @entity {
+type TokenDetails @entity {
   id: ID!
   token: Bytes!
   quantity: BigInt!
   price: BigInt!
+}
+
+type Balance @entity {
+  id: ID!
+  portfolio: Bytes!
+  tokens: [TokenDetails!]!
   createdAt: BigInt!
 }
 

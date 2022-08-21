@@ -22,19 +22,31 @@ export function handlePortfolioCreated(event: PortfolioCreated): void {
 }
 
 export function handlePortfolioBalanced(event: PortfolioBalanced): void {
-  let balancedTokens = event.params.tokenDetails;
-  let blockTime = event.block.timestamp;
-
-  balancedTokens.forEach(function (balancedToken: PortfolioBalancedTokenDetailsStruct) {
-    let balanceAddress = balancedToken.token.toHexString();
-
-    let balance = new Balance(balanceAddress);
-
-    balance.token = Bytes.fromHexString(balanceAddress);
-    balance.quantity = balancedToken.quantity;
-    balance.price = balancedToken.price;
-    // balance.createdAt = blockTime;
-
-    balance.save();
-  });
+  // let balance = new Balance(event.params.portfolio.toHexString());
+  //
+  // let balancedTokens = event.params.tokenDetails;
+  // // balancedTokens.forEach(function (balancedToken: PortfolioBalancedTokenDetailsStruct) {
+  // //   let balanceAddress = balancedToken.token.toHexString();
+  // //
+  // //   balance.tokens
+  // //
+  // //   // balance.tokens[0].token = Bytes.fromHexString(balanceAddress);
+  // //   // balance.quantity = balancedToken.quantity;
+  // //   // balance.price = balancedToken.price;
+  // //   // balance.createdAt = blockTime;
+  // // });
+  //
+  // balance.tokens = balancedTokens.map<string>(function (balancedToken: PortfolioBalancedTokenDetailsStruct): string {
+  //   let balanceAddress = balancedToken.token.toHexString();
+  //
+  //   // balance.tokens
+  //   // balance.tokens[0].token = Bytes.fromHexString(balanceAddress);
+  //   // balance.quantity = balancedToken.quantity;
+  //   // balance.price = balancedToken.price;
+  //   // balance.createdAt = blockTime;
+  //
+  //   return balanceAddress
+  // });
+  //
+  // balance.save();
 }
