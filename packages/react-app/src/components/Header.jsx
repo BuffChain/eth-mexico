@@ -7,7 +7,12 @@ const { Title, Text } = Typography;
 
 export default function Header({ link, title, subTitle, ...props }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "1.2rem" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'center', padding: "1.2rem" }}>
+      <img src='https://tuffdao.io/images/tuff_logo.png' width={64} height={64} style={{
+        marginRight: '24px'
+      }}
+      ></img>
+
       <div style={{ display: "flex", flexDirection: "column", flex: 1, alignItems: "start" }}>
         <a href={link} target="_blank" rel="noopener noreferrer">
           <Title level={4} style={{ margin: "0 0.5rem 0 0" }}>
@@ -24,7 +29,7 @@ export default function Header({ link, title, subTitle, ...props }) {
 }
 
 Header.defaultProps = {
-  link: "https://github.com/austintgriffith/scaffold-eth",
-  title: "🏗 scaffold-eth",
-  subTitle: "forkable Ethereum dev stack focused on fast product iteration",
+  link: "https://tuffdao.io",
+  title: "TuffDAO",
+  subTitle: "Portfolio and Price Tracking Services for DAOs",
 };
