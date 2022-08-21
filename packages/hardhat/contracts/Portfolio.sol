@@ -6,7 +6,7 @@ contract Portfolio {
 
     event PortfolioBalanced(TokenDetails[] tokenDetails);
 
-    string name;
+    string portfolioName;
     address[] tokens;
     TokenDetails[] tokenDetails;
     mapping(address => address) priceFeeds;
@@ -19,7 +19,7 @@ contract Portfolio {
     }
 
     constructor(string memory _name, address[] memory _tokens, PriceConsumer _priceConsumer) payable {
-        name = _name;
+        portfolioName = _name;
         tokens = _tokens;
         priceConsumer = _priceConsumer;
 
@@ -47,8 +47,8 @@ contract Portfolio {
 
     }
 
-    function _name() public view returns (string memory) {
-        return name;
+    function _portfolioName() public view returns (string memory) {
+        return portfolioName;
     }
 
     function _tokens() public view returns (address[] memory) {

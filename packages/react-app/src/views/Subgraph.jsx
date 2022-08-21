@@ -16,14 +16,6 @@ const highlight = {
 };
 
 function Subgraph(props) {
-  function graphQLFetcher(graphQLParams) {
-    return fetch(props.subgraphUri, {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(graphQLParams),
-    }).then(response => response.json());
-  }
-
   const portfolioQuery = `
   {
     portfolios(first: 25, orderBy: createdAt, orderDirection: desc) {
@@ -34,7 +26,19 @@ function Subgraph(props) {
     }
   }
   `;
-  const { loading, data } = useQuery(gql(portfolioQuery), { pollInterval: 2500 });
+  const { portfolioLoading, portfolioData } = useQuery(gql(portfolioQuery), { pollInterval: 2500 });
+
+  const balanceQuery = `
+  {
+    portfolios(first: 25, orderBy: createdAt, orderDirection: desc) {
+      id
+      name
+      tokens
+      createdAt
+    }
+  }
+  `;
+  const { balanceLoading, balanceData } = useQuery(gql(balanceQuery), { pollInterval: 2500 });
 
   const portfolioColumns = [
     {
@@ -62,20 +66,54 @@ function Subgraph(props) {
     },
   ];
 
-  const [newPurpose, setNewPurpose] = useState("loading...");
+  const balanceColumns = [
+    {
+      title: "Portfolio",
+      dataIndex: "id",
+      key: "id",
+      render: record => <Address value={record} ensProvider={props.mainnetProvider} fontSize={16} />,
+    },
+    {
+      title: "Tokens",
+      dataIndex: "tokens",
+      key: "tokens",
+      render: record => {
+        let addressComponents = record.map(assetAddr => {
+          return (<Address value={assetAddr} ensProvider={props.mainnetProvider} fontSize={16} />)
+        });
+        return (<div>{addressComponents}</div>)
+      },
+    },
+    {
+      title: "Created At",
+      key: "createdAt",
+      dataIndex: "createdAt",
+      render: d => new Date(d * 1000).toISOString(),
+    },
+  ];
 
   const deployWarning = (
     <div style={{ marginTop: 8, padding: 8 }}>Warning: 🤔 Have you deployed your subgraph yet?</div>
   );
 
   return (
-    <div style={{padding: '0px 32px'}}>
-        {data ? (
-          <Table dataSource={data.portfolios} columns={portfolioColumns} rowKey="id" />
+    <>
+      <div style={{padding: '0px 32px'}}>
+        {portfolioData ? (
+          <Table dataSource={portfolioData.portfolios} columns={portfolioColumns} rowKey="id" />
         ) : (
-          <Typography>{loading ? "Loading..." : deployWarning}</Typography>
+          <Typography>{portfolioLoading ? "Loading..." : deployWarning}</Typography>
         )}
-    </div>
+      </div>
+
+      <div style={{padding: '0px 32px'}}>
+        {balanceData ? (
+          <Table dataSource={balanceData.balance} columns={balanceColumns} rowKey="id" />
+        ) : (
+          <Typography>{balanceLoading ? "Loading..." : deployWarning}</Typography>
+        )}
+      </div>
+    </>
   );
 }
 
