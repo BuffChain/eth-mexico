@@ -320,6 +320,16 @@ function App(props) {
             */}
 
           <Contract
+            name="Portfolio"
+            price={price}
+            signer={userSigner}
+            provider={localProvider}
+            address={address}
+            blockExplorer={blockExplorer}
+            contractConfig={contractConfig}
+          />
+          
+          <Contract
             name="PortfolioManager"
             price={price}
             signer={userSigner}
