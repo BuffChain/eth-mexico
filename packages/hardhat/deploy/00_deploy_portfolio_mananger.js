@@ -89,17 +89,58 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     deployer
   );
 
-  const portfolioAddressTxResponse = await PortfolioManager.createPortfolio(
+  const USDT = "0x13512979ADE267AB5100878E2e0f485B568328a4";
+  const USDC = "0xe22da380ee6B445bb8273C81944ADEB6E8450422";
+  const DAI = "0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD";
+  const WETH = "0xd0A1E359811322d97991E03f863a0C30C2cF029C";
+
+  const portfolio1AddressTxResponse = await PortfolioManager.createPortfolio(
     "test portfolio 1",
-    ["0xdAC17F958D2ee523a2206206994597C13D831ec7"]
+    [USDT, USDC, DAI]
   );
 
-  const portfolioAddressTxReceipt = await portfolioAddressTxResponse.wait();
-  const portfolioCreatedEvent = portfolioAddressTxReceipt.events.find(event => event.event === "PortfolioCreated");
-  const portfolioAddress = portfolioCreatedEvent.args[1];
+  const portfolio1AddressTxReceipt = await portfolio1AddressTxResponse.wait();
+  const portfolio1CreatedEvent = portfolio1AddressTxReceipt.events.find(event => event.event === "PortfolioCreated");
+  const portfolioAddress1 = portfolio1CreatedEvent.args[1];
 
-  console.log(`Portfolio address [${portfolioAddress}]`);
+  console.log(`Portfolio 1 Address [${portfolioAddress1}]`);
+
+  const portfolio2AddressTxResponse = await PortfolioManager.createPortfolio(
+    "test portfolio 2",
+    [USDT, WETH]
+  );
+
+  const portfolio2AddressTxReceipt = await portfolio2AddressTxResponse.wait();
+  const portfolio2CreatedEvent = portfolio2AddressTxReceipt.events.find(event => event.event === "PortfolioCreated");
+  const portfolioAddress2 = portfolio2CreatedEvent.args[1];
+
+  console.log(`Portfolio 2 Address [${portfolioAddress2}]`);
 
   await PortfolioManager.transferOwnership(daoGovernorAddress);
+
+  await deploy("Portfolio", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    args: ["debug portfolio", [USDT, USDC, DAI]],
+    log: true,
+    waitConfirmations: 5,
+  });
+
+
+  // await deploy("PriceConsumer", {
+  //   // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+  //   from: deployer,
+  //   log: true,
+  //   waitConfirmations: 5,
+  // });
+  //
+  // const PriceConsumer = await ethers.getContract(
+  //   "PriceConsumer",
+  //   deployer
+  // );
+  //
+  // const price = await PriceConsumer.getLatestPrice();
+  // conseol.log(price)
+
 };
 module.exports.tags = ["eth-mexico-dapp-v0.0.1"];
