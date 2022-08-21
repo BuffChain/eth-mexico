@@ -22,4 +22,9 @@ contract PortfolioManager is Ownable {
         return portfolioAddress;
     }
 
+    function balancePortfolio(address payable portfolioAddress) public {
+        Portfolio portfolio = Portfolio(portfolioAddress);
+        portfolio.balance();
+    }
+
 }
