@@ -76,7 +76,7 @@ contract Portfolio {
         emit PortfolioBalanced(tokenDetails);
     }
 
-    function setTokenPriceFeed(address token, address priceFeed) public {
+    function setTokenPriceFeed(address token, address priceFeed) internal {
         priceFeeds[token] = priceFeed;
     }
 
