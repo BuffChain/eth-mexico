@@ -1,6 +1,15 @@
-type Token @entity {
+type TokenDetails @entity {
   id: ID!
-  assetAddr: Bytes!
+  token: Bytes!
+  quantity: BigInt!
+  price: BigInt!
+}
+
+type Balance @entity {
+  id: ID!
+  portfolio: Bytes!
+  tokens: [TokenDetails!]!
+  createdAt: BigInt!
 }
 
 type Portfolio @entity {

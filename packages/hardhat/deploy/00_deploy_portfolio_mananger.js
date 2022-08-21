@@ -139,6 +139,31 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
     waitConfirmations: 5,
   });
-  
+
+  const deployerAcct = await hre.ethers.getSigner(deployer);
+  const ethAmt = hre.ethers.utils.parseEther("5");
+  await deployerAcct.sendTransaction({
+    to: portfolioAddress1,
+    value: ethAmt
+  });
+
+  await hre.network.provider.request({
+    method: "hardhat_impersonateAccount",
+    params: [portfolioAddress1]
+  });
+
+  const portfolio1 = await ethers.getContract(
+    "Portfolio",
+    portfolioAddress1
+  );
+
+  await portfolio1.balance();
+  await portfolio1.balance();
+  await portfolio1.balance();
+
+  await hre.network.provider.request({
+    method: "hardhat_stopImpersonatingAccount",
+    params: [portfolioAddress1]
+  });
 };
 module.exports.tags = ["eth-mexico-dapp-v0.0.1"];

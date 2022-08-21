@@ -7,13 +7,13 @@ dataSources:
     network: localhost
     source:
       abi: PortfolioManager
-      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F"
+      startBlock: 15381700
+      address: "0x975Ab64F4901Af5f0C96636deA0b9de3419D0c2F"
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - Token
         - Portfolio
       abis:
         - name: PortfolioManager
@@ -21,4 +21,24 @@ dataSources:
       eventHandlers:
         - event: PortfolioCreated(string,address,address[])
           handler: handlePortfolioCreated
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: Portfolio
+    network: localhost
+    source:
+      abi: Portfolio
+      startBlock: 15381700
+      address: "0x94fFA1C7330845646CE9128450F8e6c3B5e44F86"
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Balance
+      abis:
+        - name: Portfolio
+          file: ./abis/localhost_Portfolio.json
+      eventHandlers:
+        - event: PortfolioBalanced(address,(address,uint256,int256)[])
+          handler: handlePortfolioBalanced
       file: ./src/mapping.ts

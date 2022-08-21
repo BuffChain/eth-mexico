@@ -4,9 +4,9 @@ import "./PriceConsumer.sol";
 
 contract Portfolio {
 
-    event PortfolioBalanced(TokenDetails[] tokenDetails);
+    event PortfolioBalanced(address portfolio, TokenDetails[] tokenDetails);
 
-    string name;
+    string portfolioName;
     address[] tokens;
     TokenDetails[] tokenDetails;
     mapping(address => address) priceFeeds;
@@ -19,7 +19,7 @@ contract Portfolio {
     }
 
     constructor(string memory _name, address[] memory _tokens, PriceConsumer _priceConsumer) payable {
-        name = _name;
+        portfolioName = _name;
         tokens = _tokens;
         priceConsumer = _priceConsumer;
 
@@ -29,16 +29,16 @@ contract Portfolio {
         address dai = 0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD;
 
 //        ETH Mainnet
-//        address ethPriceFeed = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
-//        address usdtPriceFeed = 0x3E7d1eAB13ad0104d2750B8863b489D65364e32D;
-//        address usdcPriceFeed = 0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6;
-//        address daiPriceFeed = 0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9;
+        address ethPriceFeed = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
+        address usdtPriceFeed = 0x3E7d1eAB13ad0104d2750B8863b489D65364e32D;
+        address usdcPriceFeed = 0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6;
+        address daiPriceFeed = 0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9;
 
         //        Polygon PoS Mainnet
-        address ethPriceFeed = 0xF9680D99D6C9589e2a93a78A04A279e509205945;
-        address usdtPriceFeed = 0x0A6513e40db6EB1b165753AD52E80663aeA50545;
-        address usdcPriceFeed = 0xfE4A8cc5b5B2366C1B58Bea3858e81843581b2F7;
-        address daiPriceFeed = 0x4746DeC9e833A82EC7C2C1356372CcF2cfcD2F3D;
+//        address ethPriceFeed = 0xF9680D99D6C9589e2a93a78A04A279e509205945;
+//        address usdtPriceFeed = 0x0A6513e40db6EB1b165753AD52E80663aeA50545;
+//        address usdcPriceFeed = 0xfE4A8cc5b5B2366C1B58Bea3858e81843581b2F7;
+//        address daiPriceFeed = 0x4746DeC9e833A82EC7C2C1356372CcF2cfcD2F3D;
 
         setTokenPriceFeed(weth, ethPriceFeed);
         setTokenPriceFeed(usdt, usdtPriceFeed);
@@ -47,8 +47,8 @@ contract Portfolio {
 
     }
 
-    function _name() public view returns (string memory) {
-        return name;
+    function _portfolioName() public view returns (string memory) {
+        return portfolioName;
     }
 
     function _tokens() public view returns (address[] memory) {
@@ -73,7 +73,7 @@ contract Portfolio {
             tokenDetails.push(td);
         }
 
-        emit PortfolioBalanced(tokenDetails);
+        emit PortfolioBalanced(address(this), tokenDetails);
     }
 
     function setTokenPriceFeed(address token, address priceFeed) internal {
